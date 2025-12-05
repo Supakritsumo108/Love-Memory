@@ -1,0 +1,1548 @@
+@import url("https://fonts.googleapis.com/css2?family=Mali:wght@400;700&display=swap");
+
+/* --- 1. กำหนดตัวแปรสี (Theme Variables) --- */
+:root {
+  /* ธีมเริ่มต้น (สีชมพู - Pink Theme) */
+  --bg-gradient: radial-gradient(circle, #ffdde1 0%, #ee9ca7 100%);
+  --primary-color: #ff9a9e;
+  --secondary-color: #fad0c4;
+  --accent-color: #ff4757; /* สีหัวใจ/ปุ่ม */
+  --text-gradient: linear-gradient(to right, #ff9a9e, #fecfef);
+  --card-bg: rgba(23, 23, 23, 0.95);
+  --conic-color-1: #ff9a9e;
+  --conic-color-2: #fad0c4;
+}
+
+/* ธีมสีฟ้า (Blue Theme) - จะทำงานเมื่อ body มี class="blue-theme" */
+body.blue-theme {
+  --bg-gradient: radial-gradient(circle, #a1c4fd 0%, #c2e9fb 100%);
+  --primary-color: #4facfe;
+  --secondary-color: #00f2fe;
+  --accent-color: #00c6fb;
+  --text-gradient: linear-gradient(to right, #4facfe, #00f2fe);
+  --conic-color-1: #4facfe;
+  --conic-color-2: #00f2fe;
+}
+
+/* --- ธีมกลางคืน (Night Theme) --- */
+/* จะทำงานอัตโนมัติเมื่อ script ตรวจเจอว่าเป็นเวลากลางคืน */
+body.night-theme {
+  /* พื้นหลังโทนน้ำเงินเข้ม/ดำ เหมือนท้องฟ้าตอนกลางคืน */
+  --bg-gradient: radial-gradient(circle at center, #2b32b2 0%, #1488cc 100%);
+  /* หรือถ้าชอบแบบมืดๆ เลยให้ใช้บรรทัดล่างนี้แทนครับ */
+  /* --bg-gradient: linear-gradient(to top, #232526, #414345); */
+
+  /* ปรับสีตัวอักษรและปุ่มให้เข้ากับพื้นหลังมืด */
+  --primary-color: #ffd700; /* สีเหลืองทอง (เหมือนดาว) */
+  --secondary-color: #a8c0ff; /* สีฟ้าอ่อน */
+  --accent-color: #ff6b81; /* สีหัวใจให้เด่นขึ้นในที่มืด */
+  --text-gradient: linear-gradient(
+    to right,
+    #ffffff,
+    #e0e0e0
+  ); /* ตัวหนังสือขาว */
+
+  /* ปรับสีการ์ดให้โปร่งแสงแต่เข้มขึ้น */
+  --card-bg: rgba(0, 0, 0, 0.6);
+}
+
+/* --- 2. Styles ทั่วไป (ใช้ตัวแปรแทนสีเดิม) --- */
+body {
+  font-family: "Mali", cursive;
+  background: var(--bg-gradient); /* ใช้ตัวแปร */
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  overflow: hidden;
+  transition: background 0.5s ease; /* เปลี่ยนสีนุ่มๆ */
+  flex-direction: column;
+}
+
+.hearts-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -10%;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* --- ส่วนของ Card ไฟวิ่ง (แก้ใหม่) --- */
+.card {
+  width: 360px;
+  height: 520px; /* เพิ่มความสูงนิดหน่อยให้ปุ่มไม่เบียด */
+  background: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* แสงไฟวิ่งวน (Gradient Animation) */
+.card::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 140%; /* ยาวเกินการ์ดออกมาเพื่อให้หมุนคลุมหมด */
+  background: linear-gradient(#ff2288, #387ef0); /* สีไฟ ชมพู-ฟ้า */
+  animation: rotation 5s infinite linear; /* สั่งให้หมุนตลอดเวลา */
+}
+
+/* กล่องเนื้อหาข้างใน (สีดำทับตรงกลาง เว้นขอบไว้ให้เห็นไฟ) */
+.card .content {
+  position: absolute;
+  background: #171717;
+  inset: 5px; /* เว้นขอบเข้ามา 5px เพื่อให้เห็นไฟวิ่ง */
+  border-radius: 16px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- ตกแต่งเนื้อหา --- */
+h1 {
+  font-size: clamp(1rem, 5vw, 1.3rem);
+  background: linear-gradient(to right, #ff9a9e, #fecfef); /* ตัวหนังสือไล่สี */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 5px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.timer {
+  font-size: clamp(1.2rem, 4vw, 1.1rem);
+  margin: 15px 0;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 20px;
+  border-radius: 50px; /* ทำเป็นแคปซูลมนๆ */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 1px;
+}
+
+.message {
+  color: #d1d1d1;
+  font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.heart {
+  font-size: 50px;
+  margin-bottom: 10px;
+  color: #ff4757;
+  filter: drop-shadow(0 0 10px #ff4757);
+  animation: beat 1s infinite alternate;
+}
+
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* --- ปุ่มกด --- */
+.btn-surprise {
+  font-family: "Mali", cursive;
+  padding: 12px 30px;
+  border: none;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  color: #ff4757;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 154, 158, 0.4);
+  font-weight: bold;
+  transition: transform 0.2s;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-surprise:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 20px #ff2288;
+}
+
+/* --- ปุ่มเพลง (Music Player) --- */
+.music-btn {
+  margin-top: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #aaa;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.3s;
+}
+
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ff6b81;
+  color: #ff6b81; /* ชี้แล้วเปลี่ยนเป็นสีชมพู */
+  transform: scale(1.05);
+}
+
+.music-playing {
+  border-color: #ff9a9e;
+  color: #ff9a9e;
+  box-shadow: 0 0 15px rgba(255, 154, 158, 0.2);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+}
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 85%;
+  max-width: 350px;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  color: #333;
+  animation: popupScale 0.3s ease-out;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+@keyframes popupScale {
+  from {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+.close {
+  color: #aaa;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: #ff4757;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header h2 {
+  color: #ff4757;
+  margin-top: 0;
+}
+
+.modal-body p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+@keyframes pulseMusic {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 129, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 129, 0);
+  }
+}
+
+/* Navbar */
+.nav-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  z-index: 100;
+}
+.nav-menu {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nav-menu a {
+  padding: 15px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #555;
+  display: block;
+  transition: 0.3s;
+  font-family: "Mali", cursive;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.nav-menu a:hover {
+  color: var(--primary-color);
+  transform: scale(1.1);
+}
+.close-nav {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 36px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* ปุ่มเปลี่ยนธีมใน Navbar */
+/* .theme-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 2px solid var(--primary-color);
+  background: transparent;
+  color: var(--primary-color);
+  font-family: "Mali", cursive;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+.theme-btn:hover {
+  background: var(--primary-color);
+  color: white;
+} */
+
+/* Gallery, Modal, Cursor Blink (เหมือนเดิม) */
+.photo-frame {
+  width: 240px;
+  height: auto;
+  background: #fff;
+  padding: 10px 10px 40px 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: rotate(-3deg);
+  transition: all 0.4s ease;
+  position: relative;
+}
+.photo-frame::after {
+  content: "Our Memory ❤️";
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: "Mali", cursive;
+  color: #555;
+  font-size: 1rem;
+}
+.photo-frame:hover {
+  transform: rotate(0deg) scale(1.05) translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+.photo-frame img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+.gallery-controls {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.gallery-controls button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  color: var(--primary-color);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.gallery-controls button:hover {
+  background: var(--primary-color);
+  color: #fff;
+  transform: scale(1.1);
+}
+#photoCounter {
+  color: #888;
+  font-size: 0.9rem;
+}
+.cursor-blink::after {
+  content: "|";
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent-color);
+  animation: blink 0.8s infinite;
+}
+@keyframes blink {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+/* --- Food Wheel (วงล้อสุ่ม) --- */
+.wheel-container {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); /* หมุนแบบค่อยๆ หยุด */
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+}
+
+.pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  color: var(--accent-color);
+  z-index: 10;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Love Coupons (คูปอง) --- */
+.coupon-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* แบ่งเป็น 2 คอลัมน์ */
+  gap: 15px;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.coupon {
+  background: #fff;
+  color: var(--accent-color);
+  padding: 10px;
+  border: 2px dashed var(--accent-color); /* ขอบเส้นประ */
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px; /* ความสูงคูปอง */
+  position: relative;
+  overflow: hidden;
+}
+
+/* รอยบากวงกลมด้านข้าง (ให้เหมือนตั๋วหนัง) */
+.coupon::before,
+.coupon::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: #171717; /* ต้องเป็นสีเดียวกับพื้นหลังการ์ด content */
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.coupon::before {
+  left: -6px;
+}
+.coupon::after {
+  right: -6px;
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
+.coupon:hover {
+  transform: scale(1.05) rotate(-2deg);
+  background: var(--accent-color);
+  color: #fff;
+  border-style: solid;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* เอฟเฟกต์ตอนกดใช้แล้ว */
+.coupon.used {
+  background: #dcdcdc;
+  color: #888;
+  border-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  text-decoration: line-through;
+  pointer-events: none; /* ห้ามกดซ้ำ */
+}
+
+/* --- Preloader Screen (ฉากหลังหน้าโหลด) --- */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff; /* หรือจะใช้ var(--card-bg) ก็ได้ถ้าอยากได้พื้นหลังมืด */
+  z-index: 9999; /* อยู่บนสุดเสมอ */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+}
+
+/* --- Loader CSS (จาก Uiverse ปรับสีแล้ว) --- */
+.loader {
+  display: flex;
+  position: relative;
+  justify-items: center;
+  align-items: center;
+  gap: 1rem;
+  height: 55px;
+  width: 200px;
+  overflow: hidden;
+}
+
+.loader-col {
+  /* เปลี่ยนชื่อจาก container เพื่อกันชนกับ class อื่น */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  position: relative;
+  align-items: center;
+}
+
+.carousel {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  transform-origin: center;
+  animation-delay: 2s;
+}
+
+.loader .loader-col:nth-child(3) {
+  justify-content: flex-start;
+  justify-items: flex-start;
+  animation: scroll-up 4s infinite ease-in-out;
+  animation-delay: 3s;
+}
+
+.loader .loader-col:nth-child(2) {
+  justify-content: flex-end;
+  justify-items: flex-end;
+  animation: scroll-down 4s infinite ease-in-out;
+  animation-delay: 3s;
+}
+
+.loader .loader-col:nth-child(1) {
+  justify-content: flex-end;
+  justify-items: flex-end;
+  animation: scroll-down 3s infinite ease-in-out;
+  animation-delay: 3s;
+}
+
+.love {
+  background: var(--accent-color); /* เปลี่ยนสี */
+  display: flex;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  left: 8px;
+  margin: 0.8rem 4px;
+  transform: rotate(45deg);
+  animation-delay: 2s;
+}
+
+.love::before,
+.love::after {
+  content: "";
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent-color); /* เปลี่ยนสี */
+}
+
+.love::before {
+  left: -16px;
+}
+.love::after {
+  top: -16px;
+}
+
+.death {
+  display: flex;
+  width: 100%;
+  height: 55px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  animation: rotation 3s infinite ease-in-out;
+  animation-delay: 1s;
+}
+
+.death:after {
+  content: "";
+  height: 63px;
+  position: absolute;
+  border-left: 12px solid var(--accent-color); /* เปลี่ยนสี */
+  transform: rotate(45deg);
+  border-radius: 8px;
+  top: -4px;
+}
+
+.death:before {
+  content: "";
+  height: 60px;
+  position: absolute;
+  border-left: 12px solid var(--accent-color); /* เปลี่ยนสี */
+  transform: rotate(-45deg);
+}
+
+.loader:hover {
+  animation: none;
+}
+
+.robots {
+  display: flex;
+  width: 100%;
+  height: 55px;
+  justify-content: space-between;
+  background-color: var(--accent-color);
+  border-radius: 8px; /* ปรับมุมให้มนเท่ากันสวยๆ */
+  padding: 8px;
+  animation-delay: 5s;
+  box-sizing: border-box; /* สำคัญมาก! สั่งให้นับ padding รวมในความกว้าง */
+}
+
+.robots::after,
+.robots::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  animation-delay: 2s;
+  animation: blink 0.5s 2 forwards;
+}
+
+@keyframes scroll-up {
+  0% {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  30% {
+    transform: translateY(-150%);
+    filter: blur(10px);
+  }
+  60% {
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes scroll-down {
+  0% {
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  30% {
+    transform: translateY(150%);
+    filter: blur(10px);
+  }
+  60% {
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+/* --- 3. Scrolling Marquee (แถบข้อความวิ่งด้านล่าง) --- */
+.marquee-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.15); /* พื้นหลังแถบใสๆ */
+  backdrop-filter: blur(5px);
+  padding: 8px 0;
+  overflow: hidden;
+  z-index: 10;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  color: #fff;
+  font-family: "Mali", cursive;
+  font-size: 0.9rem;
+  animation: scrollText 20s linear infinite;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes scrollText {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* สไตล์ของข้อความทักทาย */
+.greeting {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #fff; /* สีขาวเพื่อให้ตัดกับพื้นหลัง */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* เงาฟุ้งๆ */
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- ดีไซน์หน้า Home ใหม่ (New Home Layout) --- */
+
+.home-content {
+  justify-content: space-between !important; /* จัดระยะห่างให้สวยงาม */
+  padding: 30px 20px !important;
+}
+
+/* ส่วนรูปโปรไฟล์คู่ */
+.couple-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff; /* ขอบสีขาว */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* เงาให้รูปลอย */
+  background: #fff;
+  transition: transform 0.3s ease;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.heart-beat {
+  font-size: 2rem;
+  color: var(--accent-color);
+  animation: pulseHeart 1.5s infinite;
+  filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+@keyframes pulseHeart {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* หัวข้อหลัก */
+.main-title {
+  font-family: "Mali", cursive;
+  font-size: 1.6rem;
+  margin: 5px 0;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* กล่องตัวนับเวลา */
+.timer-box {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.timer-label {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.time-h2 {
+  font-size: 1rem;
+  color: #ccc;
+  margin-top: 5px;
+  letter-spacing: 1px;
+  line-height: 30px;
+}
+
+/* ปุ่ม Action ด้านล่าง */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.music-pill {
+  flex: 2; /* ให้ปุ่มเพลงยาวกว่า */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: "Mali", cursive;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.music-pill:hover,
+.music-playing {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 15px var(--primary-color);
+}
+
+.surprise-pill {
+  flex: 1; /* ปุ่มของขวัญเล็กหน่อย */
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.surprise-pill:hover {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0 0 15px #ff9a9e;
+}
+
+/* --- Styles สำหรับสมุดโน้ต --- */
+.note-paper {
+  background-color: #fff9c4; /* สีเหลืองนวลเหมือน Post-it */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  margin: 20px auto;
+  max-width: 90%;
+  position: relative;
+  transform: rotate(-1deg); /* เอียงนิดๆ ให้ดูน่ารัก */
+}
+
+.note-paper textarea {
+  width: 100%;
+  height: 150px;
+  border: none;
+  background: transparent;
+  font-family: "Mali", cursive;
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+
+.note-footer {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 10px;
+  border-top: 1px dashed #ccc;
+  padding-top: 5px;
+}
+
+.note-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.btn-save,
+.btn-clear {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  font-family: "Mali", cursive;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.btn-save {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-clear {
+  background-color: #ff4757;
+  color: white;
+}
+
+.btn-save:hover,
+.btn-clear:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- สไตล์คูปองที่ใช้แล้ว --- */
+.coupon.used {
+  background: #dcdcdc !important; /* สีเทา */
+  color: #888 !important; /* ตัวหนังสือสีจาง */
+  cursor: not-allowed; /* เมาส์เป็นรูปห้ามจอด */
+  transform: none !important; /* ห้ามขยายเวลาชี้ */
+  box-shadow: none !important; /* เอานูนๆ ออก */
+  pointer-events: none; /* ห้ามกดซ้ำเด็ดขาด */
+  border: 2px dashed #bbb;
+  opacity: 0.7;
+}
+
+/* ปรับปุ่ม Admin ให้ดูเล็กๆ ไม่เกะกะ */
+button[onclick="resetCoupons()"]:hover {
+  text-decoration: underline;
+  color: var(--accent-color);
+}
+
+/* --- Gallery Slideshow Animation --- */
+
+/* คลาสสำหรับเอฟเฟกต์ Fade */
+.fade {
+  animation-name: fadeEffect;
+  animation-duration: 1s; /* ความเร็วในการจาง (1 วินาที) */
+}
+
+@keyframes fadeEffect {
+  from {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ตกแต่งปุ่ม Play ให้ดูต่างจากปุ่มลูกศรนิดนึง */
+.play-btn {
+  font-size: 1.2rem;
+  width: 45px; /* ปรับขนาดให้พอดี */
+  background: var(--primary-color);
+  border: 2px solid #fff;
+}
+
+/* --- Love Password Overlay (หน้าจอล็อก) --- */
+#login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-gradient); /* ใช้สีเดียวกับพื้นหลังเว็บ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* อยู่บนสุด บังทุกอย่าง */
+  transition: opacity 0.5s ease;
+}
+
+.login-box {
+  /* background: rgba(255, 255, 255, 0.9); */
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 3px solid #fff;
+  max-width: 90%;
+  width: 350px;
+}
+
+.login-box h1 {
+  color: var(--accent-color);
+  margin-bottom: 10px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 20px;
+  margin: 15px 0;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-family: "Mali", cursive;
+  font-size: 1rem;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.login-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-family: "Mali", cursive;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+}
+
+/* Animation เวลาใส่รหัสผิด (สั่นๆ) */
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  75% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* --- Mascots (น้องเฝ้าจอด้านข้าง) --- */
+.mascot-container {
+    pointer-events: none; /* กดทะลุได้ ไม่บังการคลิก */
+}
+
+.mascot {
+    position: fixed;
+    bottom: 20px;
+    z-index: 10; /* อยู่หน้าสุดแต่อยู่ข้างๆ */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-mascot {
+    left: 40px;
+}
+
+.right-mascot {
+    right: 40px;
+}
+
+.mascot img {
+    width: 150px; /* ปรับขนาดน้องหมี */
+    height: auto;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+    transition: transform 0.3s ease;
+}
+
+/* อนิเมชั่นตอนเอาเมาส์ไปชี้ */
+.mascot-container { pointer-events: auto; } /* คืนค่าให้กดเล่นได้ */
+.mascot img:hover {
+    transform: scale(1.1) rotate(-5deg);
+    cursor: pointer;
+}
+
+/* กล่องข้อความพูด */
+.speech-bubble {
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-family: 'Mali', cursive;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+/* ทำสามเหลี่ยมชี้ลง */
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+}
+
+/* โชว์ข้อความตอนเมาส์ชี้ */
+.mascot:hover .speech-bubble {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- สำคัญ! ซ่อนบนมือถือ (หน้าจอเล็กกว่า 1024px) --- */
+@media screen and (max-width: 1024px) {
+    .mascot-container {
+        display: none;
+    }
+}
+
+/* --- ปุ่มใบ้คำ (Hint) --- */
+.hint-section {
+    margin-bottom: 15px;
+}
+
+.hint-btn {
+    background: none;
+    border: none;
+    color: #999;
+    font-family: 'Mali', cursive;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: 0.3s;
+}
+
+.hint-btn:hover {
+    color: var(--accent-color); /* เปลี่ยนสีเมื่อเอาเมาส์ชี้ */
+}
+
+#hint-msg {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    margin-top: 5px;
+    animation: fadeIn 0.5s;
+}
+
+/* =========================================
+   FIX: Chat Style Notes (ฉบับแก้เพี้ยน)
+   ========================================= */
+
+/* ตัวกล่องแชทหลัก - ปรับให้เต็มพื้นที่ Card แต่ไม่ล้น */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden; /* ตัดส่วนเกินมุมมน */
+    width: 100%;
+    max-width: 100%; /* กันล้นบนมือถือ */
+    height: 500px; /* กำหนดความสูงคงที่เพื่อให้ Scroll ได้ */
+    margin: 10px auto 0;
+    border: 1px solid #e0e0e0;
+}
+
+/* --- ส่วนหัว (Header) --- */
+.chat-header {
+    background: var(--bg-gradient); /* สีเดียวกับธีม */
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    color: white;
+    flex-shrink: 0; /* ห้ามโดนบีบ */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    z-index: 10;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover; /* กันรูปเบี้ยว */
+    margin-right: 10px;
+    border: 2px solid rgba(255,255,255,0.8);
+    flex-shrink: 0; /* สำคัญ! กันรูปบี้เวลาจอเล็ก */
+}
+
+.chat-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.chat-name {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.chat-status {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+/* --- พื้นที่เนื้อหาแชท (Body) --- */
+.chat-body {
+    background: #f0f2f5; /* สีพื้นหลังเหมือนแอปแชท */
+    flex-grow: 1; /* ขยายให้เต็มพื้นที่ที่เหลือ */
+    padding: 15px;
+    overflow-y: auto; /* ให้เลื่อนขึ้นลงได้เฉพาะตรงนี้ */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* ตกแต่ง Scrollbar ให้สวยงาม (เฉพาะ Chrome/Safari) */
+.chat-body::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-body::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 3px;
+}
+
+/* --- กล่องข้อความ (Bubble) --- */
+.message {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.msg-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+    margin-bottom: 5px; /* จัดให้ตรงกับท้ายข้อความ */
+    flex-shrink: 0;
+}
+
+.bubble {
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 75%; /* ไม่ให้ข้อความยาวติดขอบ */
+    font-size: 0.9rem;
+    line-height: 1.4;
+    position: relative;
+    word-wrap: break-word; /* ตัดคำถ้ายาวเกิน */
+}
+
+/* ฝั่งซ้าย (รับ) */
+.message.receive {
+    justify-content: flex-start;
+}
+.message.receive .bubble {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 4px; /* มุมแหลมฝั่งซ้าย */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ฝั่งขวา (ส่ง/ช่องพิมพ์) */
+.message.sent {
+    justify-content: flex-end;
+}
+.message.sent .bubble {
+    background: var(--primary-color);
+    color: white;
+    border-bottom-right-radius: 4px; /* มุมแหลมฝั่งขวา */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    min-width: 120px; /* ความกว้างขั้นต่ำ */
+}
+
+/* ช่องพิมพ์ข้อความ (Textarea) */
+.input-bubble textarea {
+    width: 100%;
+    min-height: 60px; /* ความสูงเริ่มต้น */
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Mali', cursive;
+    font-size: 0.95rem;
+    resize: none; /* ห้ามดึงขยายเอง */
+    outline: none;
+}
+.input-bubble textarea::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+/* เวลาและสถานะ */
+.msg-time, .msg-status {
+    display: block;
+    font-size: 0.65rem;
+    margin-top: 4px;
+    opacity: 0.8;
+    text-align: right;
+}
+
+/* --- ส่วนท้าย (Footer ปุ่มกด) --- */
+.chat-footer {
+    background: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+}
+
+.chat-footer button {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Mali', cursive;
+    font-weight: bold;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-clear {
+    background: #f5f5f5;
+    color: #666;
+    margin-right: 8px;
+}
+
+.btn-save {
+    background: var(--accent-color);
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+.btn-clear:hover {
+    background: #e0e0e0;
+}
+
+/* =========================================
+   FIX: Layout ปุ่มหน้า Home (แก้เบียด)
+   ========================================= */
+
+/* กล่องคลุมปุ่มทั้งหมด (Player + ปุ่มของขวัญ) */
+.action-buttons {
+    display: flex;
+    flex-direction: column; /* บังคับเรียงลงมาแนวตั้ง */
+    align-items: center;    /* จัดกึ่งกลาง */
+    gap: 15px;              /* เว้นระยะห่างระหว่าง Player กับปุ่มของขวัญ 15px */
+    width: 100%;
+    margin-top: -15px;       /* ดันลงมาด้านล่างของ Content */
+    margin-bottom: 10px;
+    z-index: 10;
+}
+
+/* ตัวเล่นเพลง (Music Player Widget) */
+.music-player {
+    background: rgba(255, 255, 255, 0.15); /* พื้นหลังโปร่งใสหน่อย */
+    backdrop-filter: blur(5px);
+    border-radius: 25px;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    width: 90%;            /* ความกว้างเกือบเต็มการ์ด */
+    max-width: 260px;      /* แต่ไม่เกิน 260px */
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.song-info {
+    font-size: 0.85rem;
+    color: #fff;           /* เปลี่ยนเป็นสีขาวให้อ่านง่ายบนพื้นหลังเข้ม */
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;            /* ระยะห่างระหว่างปุ่ม Play/Next */
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    opacity: 0.8;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); /* เงาให้มองเห็นชัด */
+}
+
+.control-btn:hover {
+    transform: scale(1.2);
+    opacity: 1;
+}
+
+.play-btn-main {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;      /* ปุ่ม Play สีขาว */
+    border: none;
+    color: var(--accent-color); /* ไอคอนสีตามธีม */
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-top: -5px;
+}
+
+.play-btn-main:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* ปุ่มกล่องของขวัญ (Surprise Pill) */
+.surprise-pill {
+    width: 50px;           /* ปรับขนาดให้พอดี ไม่ใหญ่เกิน */
+    height: 50px;
+    border-radius: 45%;    /* ทำเป็นวงกลม */
+    border: none;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: floatGift 3s ease-in-out infinite;
+    margin-bottom: -10px;
+}
+
+.surprise-pill:hover {
+    transform: scale(1.15) rotate(10deg);
+}
+
+/* Animation ให้กล่องของขวัญลอยๆ */
+@keyframes floatGift {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}

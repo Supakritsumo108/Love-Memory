@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Memory</title>
+    <link rel="icon" href="images/icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="login-overlay">
+        <div class="login-box">
+            <h1>🔒 Love Access</h1>
+            <p>ซูโม่เกิดวันไหนน้าา?</p> <input type="text" id="passwordInput" placeholder="พิมพ์คำตอบได้เลยย"
+                onkeypress="handleLoginEnter(event)">
+            <p id="error-msg" style="display:none; color: #ff4757; margin-top: 5px;">คำตอบผิด! ลองใหม่นะ 😝</p>
+
+            <div class="hint-section">
+                <button onclick="toggleHint()" class="hint-btn">💡 ใบ้หน่อย</button>
+                <p id="hint-msg" style="display: none;">(เฉลย: 28 มกรา ไงคับ)</p>
+            </div>
+
+            <button onclick="checkPassword()" class="login-btn">Unlock ❤️</button>
+        </div>
+    </div>
+
+    <div id="preloader">
+        <div class="loader">
+            <div class="loader-col">
+                <div class="carousel">
+                    <div class="love"></div>
+                    <div class="love"></div>
+                    <div class="love"></div>
+                    <div class="love"></div>
+                    <div class="love"></div>
+                    <div class="love"></div>
+                    <div class="love"></div>
+                </div>
+            </div>
+            <div class="loader-col">
+                <div class="carousel">
+                    <div class="death"></div>
+                    <div class="death"></div>
+                    <div class="death"></div>
+                    <div class="death"></div>
+                    <div class="death"></div>
+                    <div class="death"></div>
+                    <div class="death"></div>
+                </div>
+            </div>
+            <div class="loader-col">
+                <div class="carousel">
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                    <div class="robots"></div>
+                </div>
+            </div>
+        </div>
+        <h3 style="margin-top: 20px; color: var(--accent-color); font-family: 'Mali', cursive;">Loading our memories...
+        </h3>
+    </div>
+
+    <div class="mascot-container">
+        <div class="mascot left-mascot">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzJuemQ2czhuemZmeGxpZmVubGN0dGwya2M5aG9hcTRjN2wwNGZxbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Z21HJj2kz9uBG/giphy.gif"
+                alt="Cute Bear Left" loading="lazy">
+            <div class="speech-bubble left">รักนะจุ๊บๆ 💕</div>
+        </div>
+
+        <div class="mascot right-mascot">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzJuemQ2czhuemZmeGxpZmVubGN0dGwya2M5aG9hcTRjN2wwNGZxbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/KmxmoHUGPDjfQXqGgv/giphy.gif"
+                alt="Cute Bear Right" loading="lazy">
+            <div class="speech-bubble right">คิดถึงจัง 🥰</div>
+        </div>
+    </div>
+
+    <h2 id="greeting-text" class="greeting">กำลังโหลดข้อความ...</h2>
+
+    <div class="hearts-container"></div>
+
+    <div class="nav-icon" onclick="toggleMenu()">☰</div>
+
+    <div class="nav-menu" id="navMenu">
+        <span class="close-nav" onclick="toggleMenu()">&times;</span>
+        <a href="#" onclick="switchPage('home')">🏠 หน้าหลัก</a>
+        <a href="#" onclick="switchPage('gallery')">📸 รูปของเรา</a>
+        <a href="#" onclick="switchPage('food')">🍕 กินไรดี?</a>
+        <a href="#" onclick="switchPage('coupons')">🎫 คูปองขอพร</a>
+        <a href="#" onclick="switchPage('notes')">📝 สมุดโน้ต</a>
+
+        <!-- <button class="theme-btn" onclick="toggleTheme()">🎨 เปลี่ยนธีม</button> -->
+    </div>
+
+    <div id="food-section" class="card" style="display: none;">
+        <div class="content">
+            <h1>🍕 วันนี้กินไรดี? 🍜</h1>
+
+            <div class="wheel-container">
+                <div class="pointer">▼</div>
+                <canvas id="foodWheel" width="300" height="300"></canvas>
+            </div>
+
+            <div id="result-text" class="message"
+                style="margin-top: 15px; margin-left: 55%; font-weight: bold; color: var(--accent-color);">
+                กดปุ่มเพื่อเริ่มสุ่ม!
+            </div>
+
+            <button class="btn-surprise" onclick="spinWheel()">🎰 สุ่มเลย!</button>
+        </div>
+    </div>
+
+    <div id="coupon-section" class="card" style="display: none;">
+        <div class="content">
+            <h1>🎫 Love Coupons 🎫</h1>
+            <p class="message" style="margin-bottom: 15px; font-size: 0.9rem;">
+                กดเพื่อใช้สิทธิ์ (ใช้ได้ครั้งเดียวนะ!)
+            </p>
+
+            <div class="coupon-grid">
+                <div id="cp1" class="coupon" onclick="useCoupon('cp1', 'นวดไหล่ 20 นาที')">
+                    💆‍♀️ นวดไหล่ 20 นาที
+                </div>
+
+                <div id="cp2" class="coupon" onclick="useCoupon('cp2', 'เลี้ยงข้าว 1 มื้อ')">
+                    🍣 เลี้ยงข้าว 1 มื้อ
+                </div>
+
+                <div id="cp3" class="coupon" onclick="useCoupon('cp3', 'ตามใจ 1 วัน')">
+                    👑 ตามใจ 1 วัน
+                </div>
+
+                <div id="cp4" class="coupon" onclick="useCoupon('cp4', 'ห้ามบ่น 1 ชั่วโมง')">
+                    🤫 ห้ามบ่น 1 ชั่วโมง
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="resetCoupons()"
+                    style="background: none; border: none; color: #777; font-size: 0.8rem; cursor: pointer;">
+                    🔄 เติมคูปอง (Admin Only)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="home-section" class="card">
+        <div class="content home-content">
+            <div class="couple-profile">
+                <div class="avatar">
+                    <img src="images/sumo.jpg" alt="Me" loading="lazy">
+                </div>
+                <div class="heart-beat">❤️</div>
+                <div class="avatar">
+                    <img src="images/kanompang.jpg" alt="You" loading="lazy">
+                </div>
+            </div>
+
+            <h2 class="main-title">For My Love</h2>
+
+            <div class="timer-box">
+                <p class="timer-label">Falling in love for</p>
+                <div class="timer" id="timer">กำลังคำนวณ...</div>
+                <h2 class="time-h2" id="typing-text"></h2>
+            </div>
+
+            <div class="action-buttons">
+                <button class="surprise-pill" onclick="showSurprise()">
+                    🎁
+                </button>
+                <div class="music-player">
+                    <div class="song-info">
+                        <span id="songTitle">🎵 กด Play เพื่อเริ่มเพลง</span>
+                    </div>
+
+                    <div class="player-controls">
+                        <button class="control-btn" onclick="prevSong()">⏮️</button>
+                        <button class="play-btn-main" id="playPauseBtn" onclick="toggleMusic()">▶</button>
+                        <button class="control-btn" onclick="nextSong()">⏭️</button>
+                    </div>
+
+                    <audio id="bgMusic"></audio>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="gallery-section" class="card" style="display: none;">
+        <div class="content">
+            <h1>📸 Gallery 📸</h1>
+
+            <div class="photo-frame">
+                <img id="galleryImg" src="https://via.placeholder.com/300x400?text=Love+Photo" alt="Love Photo">
+            </div>
+
+            <div class="gallery-controls">
+                <button onclick="prevPhoto()">❮</button>
+                <button id="playPauseBtn" onclick="toggleSlideshow()" class="play-btn">▶</button>
+                <span id="photoCounter">1 / 5</span>
+                <button onclick="nextPhoto()">❯</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notes-section" class="card" style="display: none;">
+        <div class="content" style="padding: 0;">
+            <h2 style="padding-top: 20px;">💬 แชทระบายความในใจ</h2>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-profile">
+                        <img src="images/kanompang.jpg" alt="Profile" class="chat-avatar">
+                        <div class="chat-info">
+                            <span class="chat-name">คุณแฟน ❤️</span>
+                            <span class="chat-status">Active now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-body">
+                    <div class="message receive">
+                        <img src="images/sumo.jpg" alt="You" class="msg-avatar">
+                        <div class="bubble">
+                            วันไหนเหนื่อยๆ หรือมีเรื่องอะไรอยากระบาย พิมพ์ทิ้งไว้ตรงนี้ได้เลยนะ เค้ากลับมาอ่านแน่นอน! ✌️
+                            <span class="msg-time">12:00 น.</span>
+                        </div>
+                    </div>
+
+                    <div class="message sent">
+                        <div class="bubble input-bubble">
+                            <textarea id="loveNote" placeholder="พิมพ์ข้อความ..."></textarea>
+                            <span class="msg-status" id="read-status">อ่านแล้ว</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-footer">
+                    <span id="save-status"
+                        style="font-size: 0.8rem; color: #888; margin-right: auto;">ยังไม่ได้บันทึก</span>
+                    <button class="btn-clear" onclick="clearNote()">🗑️ ลบ</button>
+                    <button class="btn-save" onclick="saveNote()">➤ ส่ง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2>💖 เซอร์ไพรส์! 💖</h2>
+            </div>
+            <div class="modal-body">
+                <img src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" alt="Cute Bear"
+                    style="width: 100%; border-radius: 10px; margin-bottom: 15px;">
+                <p>รักนะจุ๊บๆ 😘</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="marquee-container">
+        <div class="marquee-text">
+            ✨ You contain my universe 🪐 รักที่สุดในโลกกกก ❤️ ขอบคุณที่เข้ามาในชีวิตนะ ☁️ Forever & Always 💖
+            วันนี้กินไรดี? 🍕 คิดถึงงงงงงง 😘
+        </div>
+    </div>
+
+    <div id="sound-effects" style="display: none;">
+        <audio id="sfx-click" src="audios/click.mp3"></audio>
+        <audio id="sfx-correct" src="audios/correct.mp3"></audio>
+        <audio id="sfx-wrong" src="audios/wrong.mp3"></audio>
+        <audio id="sfx-cheer" src="audios/cheer.mp3"></audio>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
